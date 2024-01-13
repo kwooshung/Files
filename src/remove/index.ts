@@ -48,9 +48,8 @@ const remove = async (paths: string | string[], includeSubDirs: boolean = true, 
           }
         }
 
-        if (deleteQueue.length) {
-          await Promise.all(deleteQueue);
-        }
+        // 确保所有挂起的删除操作都完成
+        await Promise.all(deleteQueue);
       }
     }
 

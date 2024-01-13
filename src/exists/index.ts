@@ -1,5 +1,5 @@
 import fs from 'fs/promises';
-import normalize from '../normalize';
+import normalize from '@/normalize';
 
 /**
  * 检查单个路径是否存在 (check if a single path exists)
@@ -10,7 +10,7 @@ const checkPathExists = async (path: string): Promise<boolean> => {
   try {
     await fs.access(path, fs.constants.F_OK);
     return true;
-  } catch (error) {
+  } catch (err) {
     return false;
   }
 };

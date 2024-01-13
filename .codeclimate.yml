@@ -1,0 +1,7 @@
+version: "2"
+exclude_patterns:
+  - "scripts/"
+  - "**/*test.js"
+  - "**/*test.ts"
+  - "**/*spec.js"
+  - "**/*spec.ts"

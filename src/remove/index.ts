@@ -15,10 +15,9 @@ const remove = async (paths: string | string[], includeSubDirs: boolean = true, 
     const normalizedPaths = Array.isArray(paths) ? paths.map((path: string) => normalize(path)) : [normalize(paths)];
 
     for (const path of normalizedPaths) {
-      const normalizedDir = normalize(path);
-      if (await exists(normalizedDir)) {
+      if (await exists(path)) {
         const deleteQueue: Promise<void>[] = [];
-        const stack: { path: string; parent: string | null }[] = [{ path: normalizedDir, parent: null }];
+        const stack: { path: string; parent: string | null }[] = [{ path, parent: null }];
 
         while (stack.length) {
           if (deleteQueue.length >= concurrency) {

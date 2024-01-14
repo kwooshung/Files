@@ -3,9 +3,9 @@ import path from 'path';
 import remove from '@/remove';
 
 /**
- * 删除所有空文件夹
- * @param {string} dirPath 根目录路径
- * @returns {Promise<boolean>} 是否成功删除所有空文件夹
+ * 删除所有空文件夹 （delete all empty folders）
+ * @param {string} dirPath 根目录路径 (root directory path)
+ * @returns {Promise<boolean>} 是否成功删除所有空文件夹 (whether all empty folders are successfully deleted)
  */
 const emptyDirs = async (dirPath: string): Promise<boolean> => {
   const stack: string[] = [];

@@ -4,52 +4,46 @@ import normalize from '@/normalize';
 import exists from '@/exists';
 
 /**
- * 删除指定路径的文件或目录 (delete the file or directory of the specified path)
- * @param {string | string[]} paths 要删除的文件或目录路径 (the file or directory path to delete)
+ * 删除指定的文件或目录 (delete the specified file or directory)
+ * @param {string} itemPath 文件或目录路径 (the path of the file or directory)
+ * @param {boolean} includeSubDirs 是否包含子目录 (whether to include subdirectories)
+ */
+const deleteItem = async (itemPath: string, includeSubDirs: boolean): Promise<void> => {
+  const stat = await fs.stat(itemPath);
+
+  if (stat.isDirectory()) {
+    const files = await fs.readdir(itemPath);
+
+    if (files.length && includeSubDirs) {
+      // 处理所有子目录和文件
+      for (const file of files) {
+        const curPath = join(itemPath, file);
+        await deleteItem(curPath, includeSubDirs);
+      }
+    }
+
+    // 检查目录是否为空，若为空则删除
+    const updatedFiles = await fs.readdir(itemPath);
+    if (updatedFiles.length === 0) {
+      await fs.rmdir(itemPath);
+    }
+  } else {
+    await fs.unlink(itemPath);
+  }
+};
+
+/**
+ * 删除指定路径的文件或目录 (delete the specified path of the file or directory)
+ * @param {string | string[]} paths 要删除的文件或目录路径 (the path of the file or directory to delete)
  * @param {boolean} [includeSubDirs=true] 是否包含子目录 (whether to include subdirectories)
- * @param {number} [concurrency=5] 并发数 (concurrency)
  * @returns {Promise<boolean>} 是否删除成功 (whether the deletion is successful)
  */
-const remove = async (paths: string | string[], includeSubDirs: boolean = true, concurrency: number = 5): Promise<boolean> => {
+const remove = async (paths: string | string[], includeSubDirs: boolean = true): Promise<boolean> => {
   try {
     const normalizedPaths = Array.isArray(paths) ? paths.map(normalize) : [normalize(paths)];
-
     for (const path of normalizedPaths) {
       if (await exists(path)) {
-        const deleteQueue: Promise<void>[] = [];
-        const stack: { path: string; parent: string | null }[] = [{ path, parent: null }];
-
-        while (stack.length) {
-          if (deleteQueue.length >= concurrency) {
-            await Promise.all(deleteQueue.splice(0, deleteQueue.length));
-          }
-
-          const { path: currentPath, parent } = stack.pop() || {};
-
-          if (currentPath) {
-            const stat = await fs.stat(currentPath);
-
-            if (stat.isDirectory()) {
-              const files = await fs.readdir(currentPath);
-
-              if (files.length) {
-                files.forEach((file) => {
-                  const curPath = join(currentPath, file);
-                  stack.push({ path: curPath, parent: currentPath });
-                });
-              } else {
-                if (includeSubDirs || parent) {
-                  deleteQueue.push(fs.rmdir(currentPath));
-                }
-              }
-            } else {
-              deleteQueue.push(fs.unlink(currentPath));
-            }
-          }
-        }
-
-        // 确保所有挂起的删除操作都完成
-        await Promise.all(deleteQueue);
+        await deleteItem(path, includeSubDirs);
       }
     }
 

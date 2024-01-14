@@ -1,7 +1,7 @@
 import path from 'path';
 import normalize from '.';
 
-describe('路径标准化函数测试', () => {
+describe('@/normalize', () => {
   it('应该正确标准化普通路径', () => {
     const inputPath = ['user', 'docs', 'letter.txt'].join(path.sep);
     const expectedPath = ['user', 'docs', 'letter.txt'].join(path.sep);

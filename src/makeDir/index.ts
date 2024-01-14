@@ -19,8 +19,15 @@ const createDir = async (dir: string): Promise<boolean> => {
     await fs.mkdir(isFilePath ? path.dirname(dir) : dir, { recursive: true });
     return true;
   } catch (err) {
-    console.error(`An error occurred during the createDir operation: ${err}`);
-    return false;
+    const error = err as NodeJS.ErrnoException;
+
+    // 如果错误代码表示目录已存在，则返回 true
+    if (error.code === 'EEXIST') {
+      return true;
+    } else if (err instanceof Error) {
+      throw err;
+    }
+    throw false;
   }
 };
 

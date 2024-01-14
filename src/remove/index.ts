@@ -3,6 +3,13 @@ import { join } from 'path';
 import normalize from '@/normalize';
 import exists from '@/exists';
 
+/**
+ * 删除指定路径的文件或目录 (delete the file or directory of the specified path)
+ * @param {string | string[]} paths 要删除的文件或目录路径 (the file or directory path to delete)
+ * @param {boolean} [includeSubDirs=true] 是否包含子目录 (whether to include subdirectories)
+ * @param {number} [concurrency=5] 并发数 (concurrency)
+ * @returns {Promise<boolean>} 是否删除成功 (whether the deletion is successful)
+ */
 const remove = async (paths: string | string[], includeSubDirs: boolean = true, concurrency: number = 5): Promise<boolean> => {
   try {
     const normalizedPaths = Array.isArray(paths) ? paths.map(normalize) : [normalize(paths)];

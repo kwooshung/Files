@@ -1,35 +1,74 @@
 import path from 'path';
+import fs from 'fs/promises';
 import remove from '@/remove';
 import exists from '@/exists';
 import makeDir from '.';
 
-describe('@/makeDir', () => {
+describe('@/await makeDir', () => {
   const testDirRoot = 'testCreateDir';
 
-  // 在每个测试后清理测试目录
   afterEach(async () => {
-    console.log('应该删除');
     await remove(testDirRoot, true);
   });
 
-  // 测试创建单层目录
-  it('应当成功创建单层目录', async () => {
+  it('成功创建单层目录', async () => {
     const dirPath = path.join(testDirRoot, 'singleDir');
     await makeDir(dirPath);
-    expect(await exists(dirPath)).toBe(true);
+    expect(exists(dirPath)).toBeTruthy();
   });
 
-  // 测试创建多层目录
-  it('应当成功创建多层目录', async () => {
+  it('成功创建多层目录', async () => {
     const dirPath = path.join(testDirRoot, 'multi/level/dir');
     await makeDir(dirPath);
-    expect(await exists(dirPath)).toBe(true);
+    expect(exists(dirPath)).toBeTruthy();
   });
 
-  // 测试为文件创建目录
-  it('应当成功为文件创建所在目录', async () => {
+  it('成功为文件创建所在目录', async () => {
     const filePath = path.join(testDirRoot, 'fileDir/file.txt');
     await makeDir(filePath);
-    expect(await exists(path.dirname(filePath))).toBe(true);
+    expect(exists(path.dirname(filePath))).toBeTruthy();
+  });
+
+  it('目录已存在时返回true', async () => {
+    const dirPath = path.join(testDirRoot, 'existingDir');
+    await makeDir(dirPath); // 首次创建目录
+    expect(await makeDir(dirPath)).toBeTruthy(); // 再次创建同一目录
+  });
+
+  it('路径为文件时，正常创建对应目录', async () => {
+    expect(await makeDir(`${testDirRoot}/file.txt`)).toBeTruthy();
+  });
+
+  it('err 不是 NodeJS.ErrnoException 实例时应当 返回 false', async () => {
+    vi.spyOn(fs, 'mkdir').mockRejectedValueOnce('Just a string');
+    const dirPath = path.join(testDirRoot, 'weirdErrorDir');
+    expect(await makeDir(dirPath)).toBeFalsy();
+  });
+
+  it('非法路径上抛出异常', async () => {
+    const invalidPath = 'some\0illegalpath';
+    expect(makeDir(invalidPath)).rejects.toThrow();
+  });
+
+  it('遇到文件系统错误时抛出异常', async () => {
+    vi.spyOn(fs, 'mkdir').mockRejectedValueOnce(new Error('File system error'));
+    const dirPath = path.join(testDirRoot, 'errorDir');
+    expect(makeDir(dirPath)).rejects.toThrow('File system error');
+  });
+
+  it('遇到 EEXIST 错误代码时应当正常返回 true', async () => {
+    const error = new Error('Some error') as NodeJS.ErrnoException;
+    error.code = 'EEXIST'; // 一个典型的 EEXIST 错误代码
+    vi.spyOn(fs, 'mkdir').mockRejectedValueOnce(error);
+    const dirPath = path.join(testDirRoot, 'existentDir');
+    await expect(makeDir(dirPath)).toBeTruthy();
+  });
+
+  it('遇到非 EEXIST 错误代码时应当抛出异常', async () => {
+    const error = new Error('Some error') as NodeJS.ErrnoException;
+    error.code = 'ENOENT'; // 一个典型的非 EEXIST 错误代码
+    vi.spyOn(fs, 'mkdir').mockRejectedValueOnce(error);
+    const dirPath = path.join(testDirRoot, 'nonexistentDir');
+    await expect(makeDir(dirPath)).rejects.toThrow('Some error');
   });
 });

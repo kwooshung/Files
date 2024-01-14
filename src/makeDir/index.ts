@@ -8,7 +8,7 @@ import normalize from '@/normalize';
  * @param {string} dir 要创建的文件夹路径，如果是文件路径，则取其所在目录 (the path of the folder to create, if it is a file path, then take its parent directory)
  * @returns {Promise<boolean>} 如果创建成功或已存在，则返回 true；否则返回 false (if the creation is successful or exists, return true; otherwise return false)
  */
-const createDir = async (dir: string): Promise<boolean> => {
+const makeDir = async (dir: string): Promise<boolean> => {
   try {
     dir = normalize(dir);
 
@@ -27,8 +27,8 @@ const createDir = async (dir: string): Promise<boolean> => {
     } else if (err instanceof Error) {
       throw err;
     }
-    throw false;
+    return false;
   }
 };
 
-export default createDir;
+export default makeDir;

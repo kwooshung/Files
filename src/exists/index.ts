@@ -18,12 +18,14 @@ const checkPathExists = async (path: string): Promise<boolean> => {
 /**
  * 检查文件或文件夹路径是否存在 (check if a file or folder path exists)
  * @param {string | string[]} paths 要检查的路径，可以是单个路径字符串或路径字符串数组 (the path to check, can be a single path string or path string array)
- * @returns {Promise<boolean>} 如果所有路径存在，则返回 `true`，否则返回 `false` (returns `true` if all paths exist, otherwise returns `false`)
+ * @param {boolean} [anyExists=false] 是否只要有一个路径存在就返回 `true` (whether to return `true` if only one path exists)
+ * @returns {Promise<boolean>} 路径是否存在 (whether the path exists)
  */
-const exists = async (paths: string | string[]): Promise<boolean> => {
+const exists = async (paths: string | string[], anyExists: boolean = false): Promise<boolean> => {
   const normalizedPaths = Array.isArray(paths) ? paths.map((p) => normalize(p)) : [normalize(paths)];
   const results = await Promise.all(normalizedPaths.map(checkPathExists));
-  return results.every((result) => result);
+
+  return anyExists ? results.some((result) => result) : results.every((result) => result);
 };
 
 export default exists;

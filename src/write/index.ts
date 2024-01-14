@@ -1,8 +1,15 @@
 import fs from 'fs/promises';
 import path from 'path';
 import normalize from '@/normalize';
-import exists from '@/exists';
+import notExists from '@/notExists';
 import makeDir from '@/makeDir';
+
+/**
+ * 抛出错误 (throw error)
+ */
+const throwErr = () => {
+  throw new Error(`The file already exists and does not overwrite or append, so it cannot be written.`);
+};
 
 /**
  * 将内容写入指定的文件 (write content to the specified file)
@@ -23,17 +30,14 @@ const write = async (filePath: string, content: string, append: boolean = false,
     // 创建目标文件夹，支持多层文件夹
     await makeDir(dirPath);
 
-    // 检查文件是否存在
-    const fileExists = await exists(absPath);
-
     // 如果文件不存在，或者允许覆盖，则直接写入
-    if (!fileExists || overwriteIfExists) {
+    if ((await notExists(absPath)) || overwriteIfExists) {
       await fs.writeFile(absPath, content, encoding);
     } else if (append) {
       // 如果文件存在且append为true，则在文件尾部追加
       await fs.appendFile(absPath, content, encoding);
     } else {
-      throw new Error(`The file already exists and does not overwrite or append, so it cannot be written.`);
+      throwErr();
     }
 
     return true; // 写入成功，返回 true
@@ -44,7 +48,7 @@ const write = async (filePath: string, content: string, append: boolean = false,
       if (append || overwriteIfExists) {
         return true; // 文件已存在，且允许追加或覆盖，则返回 true
       } else {
-        return false; // 文件已存在，不允许追加或覆盖，则返回 false
+        throwErr();
       }
     }
 

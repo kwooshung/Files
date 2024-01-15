@@ -2,7 +2,7 @@ import { join } from 'path';
 import fs from 'fs/promises';
 import exists from '@/exists';
 import write from '@/write';
-import createDir from '@/makeDir';
+import makeDir from '@/makeDir';
 import remove from '.';
 
 describe('@/remove', () => {
@@ -10,9 +10,9 @@ describe('@/remove', () => {
 
   // 创建测试目录和文件的辅助函数
   const setupTestDir = async (subDirs: string[], files: string[]) => {
-    await createDir(testDirRoot);
+    await makeDir(testDirRoot);
     for (const dir of subDirs) {
-      await createDir(join(testDirRoot, dir));
+      await makeDir(join(testDirRoot, dir));
     }
     for (const file of files) {
       await write(join(testDirRoot, file), 'test data');
@@ -24,7 +24,7 @@ describe('@/remove', () => {
   });
 
   it('成功删除一个空目录', async () => {
-    await createDir(testDirRoot);
+    await makeDir(testDirRoot);
     const result = await remove(testDirRoot);
     expect(result).toBeTruthy();
     expect(await exists(testDirRoot)).toBeFalsy();

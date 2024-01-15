@@ -61,7 +61,7 @@ describe('@/await makeDir', () => {
     error.code = 'EEXIST'; // 一个典型的 EEXIST 错误代码
     vi.spyOn(fs, 'mkdir').mockRejectedValueOnce(error);
     const dirPath = path.join(testDirRoot, 'existentDir');
-    await expect(makeDir(dirPath)).toBeTruthy();
+    expect(await makeDir(dirPath)).toBeTruthy();
   });
 
   it('遇到非 EEXIST 错误代码时应当抛出异常', async () => {
@@ -69,6 +69,6 @@ describe('@/await makeDir', () => {
     error.code = 'ENOENT'; // 一个典型的非 EEXIST 错误代码
     vi.spyOn(fs, 'mkdir').mockRejectedValueOnce(error);
     const dirPath = path.join(testDirRoot, 'nonexistentDir');
-    await expect(makeDir(dirPath)).rejects.toThrow('Some error');
+    expect(makeDir(dirPath)).rejects.toThrow('Some error');
   });
 });

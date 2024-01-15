@@ -9,26 +9,33 @@ import exists from '@/exists';
  * @param {boolean} includeSubDirs 是否包含子目录 (whether to include subdirectories)
  */
 const deleteItem = async (itemPath: string, includeSubDirs: boolean): Promise<void> => {
-  const stat = await fs.stat(itemPath);
+  const stack = [itemPath];
 
-  if (stat.isDirectory()) {
-    const files = await fs.readdir(itemPath);
+  while (stack.length > 0) {
+    const currentPath = stack[stack.length - 1];
+    const stat = await fs.stat(currentPath);
 
-    if (files.length && includeSubDirs) {
-      // 处理所有子目录和文件
-      for (const file of files) {
-        const curPath = join(itemPath, file);
-        await deleteItem(curPath, includeSubDirs);
+    if (stat.isDirectory()) {
+      const files = await fs.readdir(currentPath);
+
+      if (files.length > 0) {
+        if (includeSubDirs) {
+          // 将子目录和文件添加到栈中
+          files.forEach((file) => stack.push(join(currentPath, file)));
+        } else {
+          // 不包含子目录，跳过非空目录
+          stack.pop();
+        }
+      } else {
+        // 删除空目录并从栈中移除
+        await fs.rmdir(currentPath);
+        stack.pop();
       }
+    } else {
+      // 删除文件并从栈中移除
+      await fs.unlink(currentPath);
+      stack.pop();
     }
-
-    // 检查目录是否为空，若为空则删除
-    const updatedFiles = await fs.readdir(itemPath);
-    if (updatedFiles.length === 0) {
-      await fs.rmdir(itemPath);
-    }
-  } else {
-    await fs.unlink(itemPath);
   }
 };
 

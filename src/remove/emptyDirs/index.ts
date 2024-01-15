@@ -1,5 +1,5 @@
 import fs from 'fs/promises';
-import { join, dirname } from 'path';
+import Path from 'path';
 import remove from '@/remove';
 import normalize from '@/normalize';
 
@@ -22,7 +22,7 @@ const emptyDir = async (path: string): Promise<boolean> => {
     } else {
       for (const item of items) {
         if (item.isDirectory()) {
-          stack.push(join(currentPath, item.name));
+          stack.push(Path.join(currentPath, item.name));
         }
       }
     }
@@ -33,7 +33,7 @@ const emptyDir = async (path: string): Promise<boolean> => {
 
   for (const folder of toDelete) {
     await remove(folder);
-    const parentFolder = dirname(folder);
+    const parentFolder = Path.dirname(folder);
     if (!toDelete.includes(parentFolder)) {
       const parentItems = await fs.readdir(parentFolder);
       if (parentItems.length === 0) {

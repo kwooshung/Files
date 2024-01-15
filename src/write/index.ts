@@ -1,5 +1,5 @@
 import fs from 'fs/promises';
-import path from 'path';
+import Path from 'path';
 import normalize from '@/normalize';
 import notExists from '@/notExists';
 import makeDir from '@/makeDir';
@@ -25,7 +25,7 @@ const write = async (filePath: string, content: string, append: boolean = false,
     const absPath = normalize(filePath);
 
     // 获取目标文件夹路径
-    const dirPath = path.dirname(absPath);
+    const dirPath = Path.dirname(absPath);
 
     // 创建目标文件夹，支持多层文件夹
     await makeDir(dirPath);

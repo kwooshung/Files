@@ -1,5 +1,5 @@
 import fs from 'fs/promises';
-import { join } from 'path';
+import Path from 'path';
 import isDir from '@/isDir';
 import normalize from '@/normalize';
 import makeDir from '@/makeDir';
@@ -37,8 +37,8 @@ const dir = async (source: string, target: string, overwrite: boolean = true): P
 
         const items = await fs.readdir(currentSource, { withFileTypes: true });
         for (const item of items) {
-          const sourcePath = join(currentSource, item.name);
-          const targetPath = join(currentTarget, item.name);
+          const sourcePath = Path.join(currentSource, item.name);
+          const targetPath = Path.join(currentTarget, item.name);
 
           if (item.isDirectory()) {
             (await makeDir(targetPath)) && queue.push({ source: sourcePath, target: targetPath });

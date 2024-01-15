@@ -1,5 +1,5 @@
 import fs from 'fs/promises';
-import path from 'path';
+import Path from 'path';
 import normalize from '@/normalize';
 
 /**
@@ -13,10 +13,10 @@ const makeDir = async (dir: string): Promise<boolean> => {
     dir = normalize(dir);
 
     // 判断是否是文件路径
-    const isFilePath = path.extname(dir) !== '';
+    const isFilePath = Path.extname(dir) !== '';
 
     // 获取目录所在的目录路径，如果是文件路径，则取其父目录，否则默认为当前目录
-    await fs.mkdir(isFilePath ? path.dirname(dir) : dir, { recursive: true });
+    await fs.mkdir(isFilePath ? Path.dirname(dir) : dir, { recursive: true });
     return true;
   } catch (err) {
     const error = err as NodeJS.ErrnoException;

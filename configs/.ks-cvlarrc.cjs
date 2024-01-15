@@ -49,7 +49,6 @@ module.exports = {
       test: '测试',
       'test:watch': '测试',
       'test:ci': '测试',
-      compare: '比较',
       eslint: '脚本检查'
     },
     // 包管理工具

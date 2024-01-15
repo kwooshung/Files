@@ -44,6 +44,13 @@ describe('@/move/file', () => {
 
   it('目标路径是目录时，应该抛出异常', async () => {
     const targetDir = 'testTargetDir';
-    expect(move(sourceFile, targetDir, false)).rejects.toThrow();
+    let error = null;
+    try {
+      await move(sourceFile, targetDir, false);
+    } catch (e) {
+      error = e;
+    }
+    await remove(targetDir);
+    expect(error).toBeInstanceOf(Error);
   });
 });

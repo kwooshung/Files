@@ -1,9 +1,10 @@
 import fs from 'fs/promises';
-import path from 'path';
+import { join } from 'path';
 import isDir from '@/isDir';
 import normalize from '@/normalize';
 import makeDir from '@/makeDir';
 import file from '@/copy/file';
+import notExists from '@/notExists';
 
 /**
  * 复制目录到新位置 (copy the directory to a new location)
@@ -14,16 +15,18 @@ import file from '@/copy/file';
  */
 const dir = async (source: string, target: string, overwrite: boolean = false): Promise<boolean> => {
   try {
-    if (!isDir(source)) {
+    if (!(await isDir(source))) {
       throw new Error('The source path is not a directory.');
-    } else if (!isDir(target)) {
-      throw new Error('The target path is not a directory.');
+    } else if (!(await isDir(target))) {
+      if (await notExists(target)) {
+        if (!(await makeDir(target))) {
+          throw new Error('The target path is not a directory.');
+        }
+      }
     }
 
     const normalizedSource = normalize(source);
     const normalizedTarget = normalize(target);
-
-    await makeDir(normalizedTarget);
 
     const queue = [{ source: normalizedSource, target: normalizedTarget }];
     while (queue.length > 0) {
@@ -34,8 +37,8 @@ const dir = async (source: string, target: string, overwrite: boolean = false): 
 
         const items = await fs.readdir(currentSource, { withFileTypes: true });
         for (const item of items) {
-          const sourcePath = path.join(currentSource, item.name);
-          const targetPath = path.join(currentTarget, item.name);
+          const sourcePath = join(currentSource, item.name);
+          const targetPath = join(currentTarget, item.name);
 
           if (item.isDirectory()) {
             (await makeDir(targetPath)) && queue.push({ source: sourcePath, target: targetPath });

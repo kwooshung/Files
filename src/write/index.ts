@@ -8,7 +8,7 @@ import makeDir from '@/makeDir';
  * 抛出错误 (throw error)
  */
 const throwErr = () => {
-  throw new Error(`The file already exists and does not overwrite or append, so it cannot be written.`);
+  throw new Error('The file already exists and does not overwrite or append, so it cannot be written.');
 };
 
 /**

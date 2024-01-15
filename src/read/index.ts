@@ -15,14 +15,6 @@ const read = async (filePath: string, encoding: BufferEncoding = 'utf8'): Promis
     }
     return '';
   } catch (err) {
-    const error = err as NodeJS.ErrnoException;
-
-    if (error.code === 'ENOENT') {
-      return ''; // 文件不存在，返回空字符串
-    } else if (err instanceof Error) {
-      throw err;
-    }
-
     return '';
   }
 };

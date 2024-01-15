@@ -3,7 +3,7 @@ import makeDir from '@/makeDir';
 import write from '@/write';
 import isFile from '.';
 
-describe('isFile 函数测试', () => {
+describe('@/isFile', () => {
   const testDir = './testDirForFile';
   const testFile = `${testDir}/testFile.txt`;
 

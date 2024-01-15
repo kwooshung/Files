@@ -36,7 +36,7 @@ describe('@/copy/dir', () => {
     const emptyDestDirPath = join(testDirPath, 'emptyDestination');
     await makeDir(emptySrcDirPath);
 
-    const result = await copy(emptySrcDirPath, emptyDestDirPath);
+    const result = await copy(emptySrcDirPath, emptyDestDirPath, false);
     expect(result).toBeTruthy();
     const dirExists = await exists(emptyDestDirPath);
     expect(dirExists).toBeTruthy();
@@ -46,7 +46,7 @@ describe('@/copy/dir', () => {
     const nonExistingSrcDirPath = join(testDirPath, 'nonExistingSource');
     let error = null;
     try {
-      await copy(nonExistingSrcDirPath, destDirPath);
+      await copy(nonExistingSrcDirPath, destDirPath, false);
     } catch (e) {
       error = e;
     }
@@ -55,14 +55,14 @@ describe('@/copy/dir', () => {
   });
 
   it('当目标目录已存在且设置覆盖时，应成功复制', async () => {
-    const result = await copy(srcDirPath, destDirPath, true);
+    const result = await copy(srcDirPath, destDirPath);
     expect(result).toBeTruthy();
   });
 
   it('当源路径不是目录时应抛出错误', async () => {
     let error = null;
     try {
-      await copy(testFilePath, destDirPath);
+      await copy(testFilePath, destDirPath, false);
     } catch (e) {
       error = e;
     }
@@ -74,7 +74,7 @@ describe('@/copy/dir', () => {
     const nonDirTargetPath = join(testDirPath, 'testFile.txt');
     await write(nonDirTargetPath, '占位文件');
     try {
-      await copy(srcDirPath, nonDirTargetPath);
+      await copy(srcDirPath, nonDirTargetPath, false);
     } catch (e) {
       error = e;
     }
@@ -87,7 +87,7 @@ describe('@/copy/dir', () => {
     await makeDir(multiLevelSrcDir);
     const testFileInMultiLevelDir = join(multiLevelSrcDir, 'test.txt');
     await write(testFileInMultiLevelDir, '多级目录测试');
-    const result = await copy(srcDirPath, destDirPath, true);
+    const result = await copy(srcDirPath, destDirPath);
     expect(result).toBeTruthy();
     const fileExistsInDest = await exists(join(multiLevelDestDir, 'test.txt'));
     expect(fileExistsInDest).toBeTruthy();

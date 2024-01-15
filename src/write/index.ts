@@ -16,11 +16,11 @@ const throwErr = () => {
  * @param {string} filePath 文件路径 (file path)
  * @param {string} content 要写入的内容 (content to write)
  * @param {boolean} [append = false] 是否追加 (whether to append)
- * @param {boolean} [overwriteIfExists = false] 如果文件已存在，是否覆盖 (if the file already exists, whether to overwrite)
+ * @param {boolean} [overwriteIfExists = true] 如果文件已存在，是否覆盖 (if the file already exists, whether to overwrite)
  * @param {BufferEncoding} [encoding='utf8'] 文件的编码格式，默认为 utf8 (the encoding format of the file, default is utf8)
  * @returns {Promise<boolean>} 如果写入成功，则返回 true；否则返回 false (if the write is successful, `true` is returned; otherwise `false` is returned)
  */
-const write = async (filePath: string, content: string, append: boolean = false, overwriteIfExists: boolean = false, encoding: BufferEncoding = 'utf8'): Promise<boolean> => {
+const write = async (filePath: string, content: string, append: boolean = false, overwriteIfExists: boolean = true, encoding: BufferEncoding = 'utf8'): Promise<boolean> => {
   try {
     const absPath = normalize(filePath);
 

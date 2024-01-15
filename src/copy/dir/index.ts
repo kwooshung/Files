@@ -10,10 +10,10 @@ import notExists from '@/notExists';
  * 复制目录到新位置 (copy the directory to a new location)
  * @param {string} source 源目录路径 (source directory path)
  * @param {string} target 目标目录路径 (target directory path)
- * @param {boolean} [overwrite=false] 是否覆盖已存在的文件 (whether to overwrite existing files)
+ * @param {boolean} [overwrite=true] 是否覆盖已存在的文件 (whether to overwrite existing files)
  * @returns {Promise<boolean>} 是否复制成功 (whether the copy was successful)
  */
-const dir = async (source: string, target: string, overwrite: boolean = false): Promise<boolean> => {
+const dir = async (source: string, target: string, overwrite: boolean = true): Promise<boolean> => {
   try {
     if (!(await isDir(source))) {
       throw new Error('The source path is not a directory.');

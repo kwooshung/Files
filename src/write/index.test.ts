@@ -22,14 +22,14 @@ describe('@/write', () => {
     // 首先创建文件
     await write(testFile, testContent, false, true);
     // 尝试再次写入相同文件，不允许覆盖且不追加，预期会抛出异常
-    await expect(write(testFile, '新内容')).rejects.toThrow('The file already exists and does not overwrite or append, so it cannot be written.');
+    await expect(write(testFile, '新内容', false, false)).rejects.toThrow('The file already exists and does not overwrite or append, so it cannot be written.');
   });
 
   it('文件已存在时，在末尾追加内容', async () => {
     // 首先创建文件
     await write(testFile, testContent, false, true);
     // 追加内容到文件
-    await write(testFile, appendContent, true);
+    await write(testFile, appendContent, true, false);
     // 读取文件内容
     const content = await read(testFile);
     expect(content).toBe(testContent + appendContent);
@@ -47,7 +47,7 @@ describe('@/write', () => {
     const error = new Error('Some error') as NodeJS.ErrnoException;
     error.code = 'EEXIST'; // 一个典型的 EEXIST 错误代码
     vi.spyOn(fs, 'writeFile').mockRejectedValueOnce(error);
-    await expect(write(testFile, 'EEXIST')).rejects.toThrow('The file already exists and does not overwrite or append, so it cannot be written.');
+    await expect(write(testFile, 'EEXIST', false, false)).rejects.toThrow('The file already exists and does not overwrite or append, so it cannot be written.');
   });
 
   it('文件已存在，且允许追加或覆盖，则返回 true', async () => {

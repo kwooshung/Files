@@ -18,30 +18,30 @@ describe('@/copy/file', () => {
   });
 
   it('成功复制文件内容', async () => {
-    const result = await copy(sourceFile, targetFile);
+    const result = await copy(sourceFile, targetFile, false);
     expect(result).toBeTruthy();
     const content = await read(targetFile);
     expect(content).toBe(testContent);
   });
 
   it('当源路径或目标路径为空时应抛出错误', async () => {
-    await expect(copy('', targetFile)).rejects.toThrow();
-    await expect(copy(sourceFile, '')).rejects.toThrow();
+    await expect(copy('', targetFile, false)).rejects.toThrow();
+    await expect(copy(sourceFile, '', false)).rejects.toThrow();
   });
 
   it('当源文件和目标文件路径相同时应返回 true', async () => {
-    const result = await copy(sourceFile, sourceFile);
+    const result = await copy(sourceFile, sourceFile, false);
     expect(result).toBeTruthy();
   });
 
   it('尝试复制到同一位置，什么都不处理，也应该是成功', async () => {
-    const result = await copy(sourceFile, sourceFile);
+    const result = await copy(sourceFile, sourceFile, false);
     expect(result).toBeTruthy();
   });
 
   it('复制到已存在的文件应失败', async () => {
     await write(targetFile, '已存在的内容');
-    await expect(copy(sourceFile, targetFile)).rejects.toThrow();
+    await expect(copy(sourceFile, targetFile, false)).rejects.toThrow();
   });
 
   // 新增覆盖选项的测试
@@ -56,7 +56,7 @@ describe('@/copy/file', () => {
 
   it('源文件不存在时应抛出错误', async () => {
     await remove(sourceFile);
-    await expect(copy('nonexistent.txt', targetFile)).rejects.toThrow();
+    await expect(copy('nonexistent.txt', targetFile, false)).rejects.toThrow();
   });
 
   it('目标文件已存在，但不覆盖时应抛出错误', async () => {
@@ -68,18 +68,18 @@ describe('@/copy/file', () => {
   it('文件权限问题时应抛出错误', async () => {
     // 模拟文件权限问题
     vi.spyOn(fs, 'copyFile').mockImplementationOnce(() => Promise.reject(new Error('权限错误')));
-    await expect(copy(sourceFile, targetFile)).rejects.toThrow('权限错误');
+    await expect(copy(sourceFile, targetFile, false)).rejects.toThrow('权限错误');
   });
 
   it('磁盘空间不足时应抛出错误', async () => {
     // 模拟磁盘空间不足
     vi.spyOn(fs, 'copyFile').mockImplementationOnce(() => Promise.reject(new Error('磁盘空间不足')));
-    await expect(copy(sourceFile, targetFile)).rejects.toThrow('磁盘空间不足');
+    await expect(copy(sourceFile, targetFile, false)).rejects.toThrow('磁盘空间不足');
   });
 
   it('源文件和目标文件是同一文件的不同路径表示时应处理正确', async () => {
     const relativePath = './' + sourceFile;
-    const result = await copy(relativePath, sourceFile);
+    const result = await copy(relativePath, sourceFile, false);
     expect(result).toBeTruthy();
   });
 });

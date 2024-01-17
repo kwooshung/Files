@@ -1,18 +1,16 @@
 import { join } from 'path';
-import write from '@/write';
 import exists from '@/exists';
+import write from '@/write';
 import remove from '@/remove';
 import makeDir from '@/makeDir';
 import copy from '.';
 
-// 测试所需的临时目录和文件
-const testDirPath = 'testCopyDir';
-const srcDirPath = join(testDirPath, 'source');
-const destDirPath = join(testDirPath, 'destination');
-const testFilePath = join(srcDirPath, 'testFile.txt');
-
 describe('@/copy/dir', () => {
-  // 创建测试环境
+  const testDirPath = 'testCopyDir';
+  const srcDirPath = join(testDirPath, 'source');
+  const destDirPath = join(testDirPath, 'destination');
+  const testFilePath = join(srcDirPath, 'testFile.txt');
+
   beforeAll(async () => {
     await makeDir(testDirPath);
     await makeDir(srcDirPath);
@@ -42,43 +40,9 @@ describe('@/copy/dir', () => {
     expect(dirExists).toBeTruthy();
   });
 
-  it('当源目录不存在时应抛出错误', async () => {
-    const nonExistingSrcDirPath = join(testDirPath, 'nonExistingSource');
-    let error = null;
-    try {
-      await copy(nonExistingSrcDirPath, destDirPath, false);
-    } catch (e) {
-      error = e;
-    }
-
-    expect(error).toBeInstanceOf(Error);
-  });
-
   it('当目标目录已存在且设置覆盖时，应成功复制', async () => {
     const result = await copy(srcDirPath, destDirPath);
     expect(result).toBeTruthy();
-  });
-
-  it('当源路径不是目录时应抛出错误', async () => {
-    let error = null;
-    try {
-      await copy(testFilePath, destDirPath, false);
-    } catch (e) {
-      error = e;
-    }
-    expect(error).toBeInstanceOf(Error);
-  });
-
-  it('当目标路径不是目录时应抛出错误', async () => {
-    let error = null;
-    const nonDirTargetPath = join(testDirPath, 'testFile.txt');
-    await write(nonDirTargetPath, '占位文件');
-    try {
-      await copy(srcDirPath, nonDirTargetPath, false);
-    } catch (e) {
-      error = e;
-    }
-    expect(error).toBeInstanceOf(Error);
   });
 
   it('复制包含多级子目录和文件的目录', async () => {
@@ -91,5 +55,20 @@ describe('@/copy/dir', () => {
     expect(result).toBeTruthy();
     const fileExistsInDest = await exists(join(multiLevelDestDir, 'test.txt'));
     expect(fileExistsInDest).toBeTruthy();
+  });
+
+  it('当目标路径不是目录时，应该抛出异常', async () => {
+    const nonDirTargetPath = join(testDirPath, 'testFile.txt');
+    await write(nonDirTargetPath, '占位文件');
+    expect(await copy(srcDirPath, nonDirTargetPath, false)).toBeTruthy();
+  });
+
+  it('当源目录不存在时，应该抛出异常', async () => {
+    const nonExistingSrcDirPath = join(testDirPath, 'nonExistingSource');
+    await expect(copy(nonExistingSrcDirPath, destDirPath, false)).rejects.toThrow(Error);
+  });
+
+  it('当源路径不是目录时，应该抛出异常', async () => {
+    await expect(copy(testFilePath, destDirPath, false)).rejects.toThrow(Error);
   });
 });

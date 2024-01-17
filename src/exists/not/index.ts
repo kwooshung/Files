@@ -6,6 +6,6 @@ import exists from '@/exists';
  * @param {boolean} [anyNotExists=false] 如果为 true，则有任意一个路径不存在即返回 true；如果为 false，则所有路径都必须不存在才返回 true (if `true`, any path that does not exist will return `true`; if `false`, all paths must not exist to return `true`)
  * @returns {Promise<boolean>} 路径是否不存在 (whether the path does not exist)
  */
-const notExists = async (paths: string | string[], anyNotExists: boolean = false): Promise<boolean> => !(await exists(paths, !anyNotExists));
+const not = async (paths: string | string[], anyNotExists: boolean = false): Promise<boolean> => !(await exists(paths, !anyNotExists));
 
-export default notExists;
+export default not;

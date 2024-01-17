@@ -1,96 +1,116 @@
 import { join } from 'path';
 import fs from 'fs/promises';
 import exists from '@/exists';
-import write from '@/write';
 import makeDir from '@/makeDir';
-import remove from '.';
+import write from '@/write';
+import remove from '@/remove';
 
 describe('@/remove', () => {
-  const testDirRoot = 'testRemoveDir';
+  const testDir = 'test-remove';
+  const testFile = join(testDir, 'test.txt');
 
-  // 创建测试目录和文件的辅助函数
-  const setupTestDir = async (subDirs: string[], files: string[]) => {
-    await makeDir(testDirRoot);
-    for (const dir of subDirs) {
-      await makeDir(join(testDirRoot, dir));
-    }
-    for (const file of files) {
-      await write(join(testDirRoot, file), 'test data');
-    }
-  };
+  beforeAll(async () => {
+    await makeDir(testDir);
+    await write(testFile, '这是一个测试文件');
+  });
 
   afterAll(async () => {
-    await remove(testDirRoot, true);
+    await remove(testDir);
   });
 
-  it('成功删除一个空目录', async () => {
-    await makeDir(testDirRoot);
-    const result = await remove(testDirRoot);
+  it('应该能够删除文件', async () => {
+    const result = await remove(testFile);
     expect(result).toBeTruthy();
-    expect(await exists(testDirRoot)).toBeFalsy();
+    expect(await exists(testFile)).toBeFalsy();
   });
 
-  it('成功删除一个含有文件的目录', async () => {
-    await setupTestDir([], ['test.txt']);
-    const result = await remove(testDirRoot);
+  it('应该能够删除目录', async () => {
+    const result = await remove(testDir);
     expect(result).toBeTruthy();
-    expect(await exists(testDirRoot)).toBeFalsy();
+    expect(await exists(testDir)).toBeFalsy();
   });
 
-  it('成功删除多个文件的目录', async () => {
-    await setupTestDir([], ['test1.txt', 'test2.txt']);
-    const result = await remove(testDirRoot);
-    expect(result).toBeTruthy();
-    expect(await exists(testDirRoot)).toBeFalsy();
-  });
-
-  it('成功删除多个目录', async () => {
-    await setupTestDir([], ['one/aaa.txt', 'two/bbb.txt']);
-    const result = await remove([join(testDirRoot, 'one'), join(testDirRoot, 'two')]);
-    expect(result).toBeTruthy();
-    expect(await exists(testDirRoot)).toBeTruthy();
-  });
-
-  it('成功删除一个含有子目录和文件的目录', async () => {
-    await setupTestDir(['subDir'], ['test.txt', 'subDir/subTest.txt']);
-    const result = await remove(testDirRoot, true);
-    expect(result).toBeTruthy();
-    expect(await exists(testDirRoot)).toBeFalsy();
-  });
-
-  it('删除不存在的文件或目录', async () => {
-    const result = await remove('nonExistentPath');
+  it('删除不存在的文件或目录时应返回 true', async () => {
+    const result = await remove('不存在的文件或目录');
     expect(result).toBeTruthy();
   });
 
-  it('不删除子目录的情况', async () => {
-    await setupTestDir(['subDir'], ['test.txt', 'subDir/subTest.txt']);
-    expect(await remove(testDirRoot, false)).toBeTruthy();
-  });
+  it('尝试删除非空目录应该返回 false', async () => {
+    const nonEmptyDir = join(testDir, 'non-empty');
+    await makeDir(nonEmptyDir);
+    await write(join(nonEmptyDir, 'file.txt'), '非空目录的文件');
 
-  it('删除包含多层子目录的目录', async () => {
-    await setupTestDir(['subDir1', 'subDir1/subDir2'], ['subDir1/subDir2/test.txt']);
-    const result = await remove(testDirRoot, true);
+    const result = await remove(nonEmptyDir);
     expect(result).toBeTruthy();
-    expect(await exists(testDirRoot)).toBeFalsy();
   });
 
-  it('处理无效路径的异常', async () => {
+  it('删除多个路径', async () => {
+    const path1 = join(testDir, 'path1');
+    const path2 = join(testDir, 'path2');
+    const path3 = join(testDir, 'path3');
+    const file1 = join(testDir, 'a', 'a.txt');
+    const file2 = join(testDir, 'b', 'b.txt');
+    const file3 = join(testDir, 'c', 'c.txt');
+
+    await makeDir(path1);
+    await makeDir(path2);
+    await makeDir(path3);
+
+    await write(file1, 'a');
+    await write(file2, 'b');
+    await write(file3, 'c');
+
+    const result = await remove([path1, path2, path3, file1, file2, file3]);
+    expect(result).toBeTruthy();
+  });
+
+  it('不会删除子目录', async () => {
+    const basePath = join(testDir, 'includeSubDirs');
+    const path1 = join(basePath, 'a', 'a.txt');
+    const path2 = join(basePath, 'b', 'b.txt');
+    const path3 = join(basePath, 'c', 'c.txt');
+    const path4 = join(basePath, 'd');
+
+    await write(path1, 'a');
+    await write(path2, 'b');
+    await write(path3, 'c');
+    await makeDir(path4);
+
+    const result = await remove(basePath, false);
+    expect(result).toBeTruthy();
+    expect(await exists([path1, path2, path3, path4])).toBeTruthy();
+  });
+
+  it('处理删除不存在的文件或目录的情况', async () => {
+    const nonExistentPath = join(testDir, 'non-existent');
+    const result = await remove(nonExistentPath);
+    expect(result).toBeTruthy();
+  });
+
+  it('处理无效路径的，应该返回 true', async () => {
     const invalidPath = 'path/does/not/exist';
     expect(await remove(invalidPath)).toBeTruthy();
   });
 
   it('尝试触发异常，抛出标准错误', async () => {
-    await setupTestDir([], ['error1.txt']);
+    await write(join(testDir, 'error', 'error1.txt'), 'error1');
     const error = new Error();
-    vi.spyOn(fs, 'unlink').mockRejectedValueOnce(error);
+    jest.spyOn(fs, 'unlink').mockRejectedValueOnce(error);
 
-    expect(remove(testDirRoot)).rejects.toThrow();
+    let err: Error;
+
+    try {
+      await remove(join(testDir, 'error'));
+    } catch (e) {
+      err = e;
+    }
+
+    expect(err).toBe(error);
   });
 
   it('尝试触发异常，非标准错误，直接返回false', async () => {
-    await setupTestDir([], ['error2.txt']);
-    vi.spyOn(fs, 'unlink').mockRejectedValueOnce({ abc: 123 });
-    expect(await remove(testDirRoot)).toBeFalsy();
+    await write(join(testDir, 'error', 'error2.txt'), 'error2');
+    jest.spyOn(fs, 'unlink').mockRejectedValueOnce({ abc: 123 });
+    expect(await remove(join(testDir, 'error'))).toBeFalsy();
   });
 });

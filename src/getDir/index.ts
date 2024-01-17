@@ -1,5 +1,5 @@
 import fs from 'fs/promises';
-import Path from 'path';
+import { join } from 'path';
 
 /**
  * 过滤类型 (filter type)
@@ -24,7 +24,7 @@ const getDir = async (dirPath: string, includeSubDirs: boolean = false, filter: 
       const items = await fs.readdir(currentPath, { withFileTypes: true });
 
       for (const item of items) {
-        const fullPath = Path.join(currentPath, item.name);
+        const fullPath = join(currentPath, item.name);
 
         if (item.isDirectory()) {
           if (filter === 'dir' || filter === 'all') {

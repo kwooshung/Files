@@ -14,7 +14,7 @@ const read = async (filePath: string, encoding: BufferEncoding = 'utf8'): Promis
       return await fs.readFile(normalize(filePath), encoding);
     }
     return '';
-  } catch (err) {
+  } catch {
     return '';
   }
 };

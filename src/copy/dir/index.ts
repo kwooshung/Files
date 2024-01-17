@@ -1,10 +1,10 @@
 import fs from 'fs/promises';
-import Path from 'path';
+import { join } from 'path';
 import isDir from '@/isDir';
 import normalize from '@/normalize';
 import makeDir from '@/makeDir';
-import file from '@/copy/file';
-import notExists from '@/notExists';
+import notExists from '@/exists/not';
+import copy from '@/copy/file';
 
 /**
  * 复制目录到新位置 (copy the directory to a new location)
@@ -19,6 +19,7 @@ const dir = async (source: string, target: string, overwrite: boolean = true): P
       throw new Error('The source path is not a directory.');
     } else if (!(await isDir(target))) {
       if (await notExists(target)) {
+        // 下面这个条件比较苛刻，不太容易出现，测试也不容易覆盖到，从而保证了代码的健壮性 (The following condition is relatively harsh and not easy to appear, and the test is not easy to cover, thereby ensuring the robustness of the code)
         if (!(await makeDir(target))) {
           throw new Error('The target path is not a directory.');
         }
@@ -37,13 +38,13 @@ const dir = async (source: string, target: string, overwrite: boolean = true): P
 
         const items = await fs.readdir(currentSource, { withFileTypes: true });
         for (const item of items) {
-          const sourcePath = Path.join(currentSource, item.name);
-          const targetPath = Path.join(currentTarget, item.name);
+          const sourcePath = join(currentSource, item.name);
+          const targetPath = join(currentTarget, item.name);
 
           if (item.isDirectory()) {
             (await makeDir(targetPath)) && queue.push({ source: sourcePath, target: targetPath });
           } else {
-            await file(sourcePath, targetPath, overwrite);
+            await copy(sourcePath, targetPath, overwrite);
           }
         }
       }

@@ -1,39 +1,40 @@
-import write from '@/write';
+import { join } from 'path';
 import remove from '@/remove';
 import makeDir from '@/makeDir';
-import exists from '.';
+import write from '@/write';
+import exists from '@/exists';
 
 describe('@/exists', () => {
-  it('检查文件是否存在', async () => {
-    const testFile = 'testExists.txt';
-    await write(testFile, '测试内容');
+  const testDir = 'test-exists';
+  const testFilePath = join(testDir, 'file.txt');
+  const nonExistentPath = join(testDir, 'nonexistent.txt');
 
-    const existsResult = await exists(testFile);
-    await remove(testFile);
-
-    expect(existsResult).toBeTruthy();
-  });
-
-  it('检查文件夹是否存在', async () => {
-    const testDir = 'testExistsDir';
+  beforeAll(async () => {
     await makeDir(testDir);
-
-    const existsResult = await exists(testDir);
-    await remove(testDir);
-
-    expect(existsResult).toBeTruthy();
+    await write(testFilePath, 'Hello World');
   });
 
-  it('检查多个路径是否存在', async () => {
-    const testFile1 = 'testExists1.txt';
-    const testFile2 = 'testExists2.txt';
-    await write(testFile1, '测试内容');
-    await write(testFile2, '测试内容');
+  afterAll(async () => {
+    await remove(testDir);
+  });
 
-    const existsResult = await exists([testFile1, testFile2]);
-    await remove(testFile1);
-    await remove(testFile2);
+  it('检查单个存在的文件路径', async () => {
+    expect(await exists(testFilePath)).toBeTruthy();
+  });
 
-    expect(existsResult).toBeTruthy();
+  it('检查单个不存在的文件路径', async () => {
+    expect(await exists(nonExistentPath)).toBeFalsy();
+  });
+
+  it('检查多个路径，全部存在', async () => {
+    expect(await exists([testFilePath, testDir])).toBeTruthy();
+  });
+
+  it('检查多个路径，至少一个存在', async () => {
+    expect(await exists([testFilePath, nonExistentPath], true)).toBeTruthy();
+  });
+
+  it('检查多个路径，全部不存在', async () => {
+    expect(await exists([nonExistentPath, join(testDir, 'anotherNonexistent.txt')])).toBeFalsy();
   });
 });

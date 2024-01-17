@@ -13,7 +13,7 @@ describe('@/write', () => {
   });
 
   it('成功写入文件内容', async () => {
-    await write(testFile, testContent, false, true);
+    await write(testFile, testContent);
     const content = await read(testFile);
     expect(content).toBe(testContent);
   });
@@ -46,14 +46,14 @@ describe('@/write', () => {
   it('遇到 EEXIST 错误代码时应当正常返回 true', async () => {
     const error = new Error('Some error') as NodeJS.ErrnoException;
     error.code = 'EEXIST'; // 一个典型的 EEXIST 错误代码
-    vi.spyOn(fs, 'writeFile').mockRejectedValueOnce(error);
+    jest.spyOn(fs, 'writeFile').mockRejectedValueOnce(error);
     await expect(write(testFile, 'EEXIST', false, false)).rejects.toThrow('The file already exists and does not overwrite or append, so it cannot be written.');
   });
 
   it('文件已存在，且允许追加或覆盖，则返回 true', async () => {
     const error = new Error('Some error') as NodeJS.ErrnoException;
     error.code = 'EEXIST'; // 一个典型的非 EEXIST 错误代码
-    vi.spyOn(fs, 'writeFile').mockRejectedValueOnce(error);
+    jest.spyOn(fs, 'writeFile').mockRejectedValueOnce(error);
     expect(await write(testFile, 'EEXIST', true, true)).toBeTruthy();
   });
 });

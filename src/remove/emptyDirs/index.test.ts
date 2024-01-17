@@ -1,94 +1,124 @@
 import { join } from 'path';
-import fs from 'fs/promises';
 import exists from '@/exists';
-import notExists from '@/notExists';
-import write from '@/write';
-import makeDir from '@/makeDir';
+import notExists from '@/exists/not';
 import remove from '@/remove';
-import emptyDirs from '.';
+import makeDir from '@/makeDir';
+import write from '@/write';
+import removeEmptyDirs from '.';
 
 describe('@/remove/emptyDirs', () => {
-  const testDirRoot = 'testEmptyDir';
-
-  // 创建测试目录和文件的辅助函数
-  const setupTestDir = async (subDirs: string[], files: string[]) => {
-    await makeDir(testDirRoot);
-    for (const dir of subDirs) {
-      await makeDir(join(testDirRoot, dir));
-    }
-    for (const file of files) {
-      await write(join(testDirRoot, file), 'test data');
-    }
+  const testDirBase = 'test-removeEmptyDirs';
+  const createNestedDirStructure = async () => {
+    await makeDir(join(testDirBase, 'emptyDir'));
+    await makeDir(join(testDirBase, 'notEmptyDir'));
+    await makeDir(join(testDirBase, 'nestedDir', 'emptyNestedDir'));
+    await write(join(testDirBase, 'notEmptyDir', 'file.txt'), 'Test content');
   };
 
+  beforeAll(async () => {
+    await makeDir(testDirBase);
+    await createNestedDirStructure();
+  });
+
   afterAll(async () => {
-    await remove(testDirRoot, true);
-  });
-
-  it('成功查找到空目录，空目录删除后，根目录也空了，那么就会删除根目录', async () => {
-    await setupTestDir(['empty1', 'empty2', 'empty3', 'empty4'], []);
-
-    expect(await emptyDirs(testDirRoot)).toBeTruthy();
-    expect(await notExists(testDirRoot)).toBeTruthy();
-  });
-
-  it('成功查找到空目录，并删除', async () => {
-    await setupTestDir(['empty1', 'empty2', 'empty3', 'empty4'], ['abc.txt', 'nonempty1/abc.txt', 'nonempty2/abc.txt', 'nonempty3/abc.txt', 'nonempty4/abc.txt']);
-
-    expect(await emptyDirs(testDirRoot)).toBeTruthy();
-  });
-
-  it('成功查找到多个空目录，并删除', async () => {
-    await setupTestDir(['empty1/a', 'empty2/b', 'empty3/c', 'empty2/a', 'empty2/b', 'empty2/c'], []);
-
-    expect(await emptyDirs([join(testDirRoot, 'empty1'), join(testDirRoot, 'empty2')])).toBeTruthy();
-  });
-
-  it('处理不存在的目录', async () => {
-    await expect(emptyDirs('nonExistingDir')).rejects.toThrow();
-  });
-
-  it('处理非目录路径', async () => {
-    const filePath = join(testDirRoot, 'file.txt');
-    await write(filePath, 'test data');
-    await expect(emptyDirs(filePath)).rejects.toThrow();
-  });
-
-  it('删除多层嵌套的空目录', async () => {
-    await setupTestDir(['nested1/nested2/nested3', 'nested1/nested2/nonempty'], ['nested1/nested2/nonempty/abc.txt']);
-    const result = await emptyDirs(join(testDirRoot, 'nested1'));
-    const nested3Exists = await exists(join(testDirRoot, 'nested1/nested2/nested3'));
-    const nonEmptyExists = await exists(join(testDirRoot, 'nested1/nested2/nonempty'));
-
-    expect(result).toBeTruthy();
-    expect(nested3Exists).toBeFalsy();
-    expect(nonEmptyExists).toBeTruthy();
+    await remove(testDirBase);
   });
 
   it('尝试删除不存在的目录', async () => {
-    const nonExistingPath = join(testDirRoot, 'nonExisting');
-    await expect(emptyDirs(nonExistingPath)).rejects.toThrow();
+    const nonExistingPath = join(testDirBase, 'nonExisting');
+    await expect(removeEmptyDirs(nonExistingPath)).rejects.toThrow();
+  });
+
+  it('应该删除所有空文件夹', async () => {
+    const result = await removeEmptyDirs(testDirBase);
+    expect(result).toBeTruthy();
+  });
+
+  it('成功查找到空目录，空目录删除后，根目录也空了，那么就会删除根目录', async () => {
+    await makeDir([join(testDirBase, 'empty1'), join(testDirBase, 'empty2'), join(testDirBase, 'empty3'), join(testDirBase, 'empty4')]);
+
+    expect(await remove(join(testDirBase, 'notEmptyDir/file.txt'))).toBeTruthy();
+    expect(await removeEmptyDirs(testDirBase)).toBeTruthy();
+    expect(await notExists(testDirBase)).toBeTruthy();
+  });
+
+  it('成功查找到多个空目录，并删除', async () => {
+    await makeDir([join(testDirBase, 'empty1', 'a'), join(testDirBase, 'empty2', 'b'), join(testDirBase, 'empty3', 'c'), join(testDirBase, 'empty4', 'd')]);
+
+    expect(await remove(join(testDirBase, 'notEmptyDir/file.txt'))).toBeTruthy();
+    expect(await removeEmptyDirs(testDirBase)).toBeTruthy();
+    expect(await notExists(testDirBase)).toBeTruthy();
+  });
+
+  it('删除多层嵌套的空目录，只要有文件就不删除', async () => {
+    await makeDir([
+      join(testDirBase, 'nested1', 'nested2', 'nested3'),
+      join(testDirBase, 'nested1', 'nested2', 'nonempty'),
+      join(testDirBase, 'nested1', 'nested2', 'nonempty', 'aaa.txt'),
+      join(testDirBase, 'nested1', 'nested2', 'nonempty', 'bbb.txt')
+    ]);
+    await write(join(testDirBase, 'nested1', 'nested2', 'nonempty', 'abc.txt'), 'Test content');
+    await write(join(testDirBase, 'nested1', 'nested2', 'nonempty', 'bbb-txt', 'abc.txt'), 'Test content');
+
+    expect(await remove(join(testDirBase, 'notEmptyDir/file.txt'))).toBeTruthy();
+    expect(await removeEmptyDirs(testDirBase)).toBeTruthy();
+
+    expect(await notExists(join(testDirBase, 'nested1', 'nested2', 'nonempty', 'aaa.txt'))).toBeTruthy(); // 删除了aaa.txt
+    expect(await notExists(join(testDirBase, 'emptyDir'))).toBeTruthy();
+    expect(await notExists(join(testDirBase, 'nestedDir', 'emptyNestedDir'))).toBeTruthy();
+
+    expect(await exists(testDirBase)).toBeTruthy();
+    expect(await exists(join(testDirBase, 'nested1'))).toBeTruthy();
+    expect(await exists(join(testDirBase, 'nested1', 'nested2'))).toBeTruthy();
+    expect(await exists(join(testDirBase, 'nested1', 'nested2', 'nonempty'))).toBeTruthy();
+    expect(await exists(join(testDirBase, 'nested1', 'nested2', 'nonempty', 'abc.txt'))).toBeTruthy();
+    expect(await exists(join(testDirBase, 'nested1', 'nested2', 'nonempty', 'bbb-txt'))).toBeTruthy();
+    expect(await exists(join(testDirBase, 'nested1', 'nested2', 'nonempty', 'bbb-txt', 'abc.txt'))).toBeTruthy();
+  });
+
+  it('删除，多个路径，多层嵌套的空目录，只要有文件就不删除', async () => {
+    await makeDir([join(testDirBase, 'a', '1', '5'), join(testDirBase, 'b', '2', '6'), join(testDirBase, 'c', '3', '7'), join(testDirBase, 'd', '4', '8')]);
+
+    await write(join(testDirBase, 'c', '3', 'abc.txt'), 'Test content');
+
+    expect(await remove(join(testDirBase, 'notEmptyDir/file.txt'))).toBeTruthy();
+    expect(await removeEmptyDirs([join(testDirBase, 'a'), join(testDirBase, 'b'), join(testDirBase, 'c'), join(testDirBase, 'd')])).toBeTruthy();
+
+    expect(await exists(testDirBase)).toBeTruthy();
+    expect(await exists(join(testDirBase, 'c'))).toBeTruthy();
+    expect(await exists(join(testDirBase, 'c', '3'))).toBeTruthy();
+
+    expect(await notExists(join(testDirBase, 'a'))).toBeTruthy();
+    expect(await notExists(join(testDirBase, 'b'))).toBeTruthy();
+    expect(await notExists(join(testDirBase, 'c', '3', '7'))).toBeTruthy();
+    expect(await notExists(join(testDirBase, 'd'))).toBeTruthy();
+  });
+
+  it('不应删除包含文件的文件夹', async () => {
+    const notEmptyDirExists = await remove(join(testDirBase, 'notEmptyDir'));
+    expect(notEmptyDirExists).toBeTruthy();
   });
 
   it('尝试删除文件而不是目录', async () => {
-    const filePath = join(testDirRoot, 'file.txt');
-    await setupTestDir([], [filePath]);
-    await expect(emptyDirs(filePath)).rejects.toThrow();
+    const filePath = join(testDirBase, 'file.txt');
+    await write(filePath, 'Test content');
+    await expect(removeEmptyDirs(filePath)).rejects.toThrow();
   });
 
-  it('处理删除过程中发生的异常', async () => {
-    vi.spyOn(fs, 'readdir').mockImplementationOnce(() => {
-      throw new Error('模拟读取目录时的错误');
-    });
-    const testPath = join(testDirRoot, 'test');
-    await makeDir(testPath);
-    await expect(emptyDirs(testPath)).rejects.toThrow();
+  it('应该删除嵌套的空文件夹', async () => {
+    const nestedEmptyDirExists = await remove(join(testDirBase, 'nestedDir/emptyNestedDir'));
+    expect(nestedEmptyDirExists).toBeTruthy();
   });
 
-  it('空目录与非空目录混合，只删除空目录', async () => {
-    await setupTestDir(['empty', 'nonempty'], ['nonempty/file.txt']);
-    expect(await emptyDirs(testDirRoot)).toBeTruthy();
-    expect(await exists(join(testDirRoot, 'nonempty'))).toBeTruthy();
-    expect(await notExists(join(testDirRoot, 'empty'))).toBeTruthy();
+  it('在传递不存在的目录时，应该抛出异常', async () => {
+    let err: Error;
+
+    try {
+      await removeEmptyDirs('nonExistingDir');
+    } catch (e) {
+      err = e;
+    }
+
+    expect(err['code']).toBe('ENOENT');
   });
 });

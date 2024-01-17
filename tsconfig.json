@@ -4,24 +4,12 @@
     "paths": {
       "@/*": ["./src/*"]
     },
-    "allowJs": true,
-    "target": "ES2020",
-    "useDefineForClassFields": true,
-    "lib": ["dom", "ES2020"],
+    "target": "ESNext",
     "module": "ESNext",
-    "skipLibCheck": true,
-    "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
-    "types": ["vitest/globals"]
+    "moduleResolution": "node",
+    "outDir": "./dist",
+    "esModuleInterop": true,
+    "resolveJsonModule": true
   },
-  "include": ["./src", "./typings.d.ts"],
-  "typeRoots": ["node_modules/@types", "vitest/globals", "./typings.d.ts"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "exclude": ["node_modules", ".vscode", ".github", "dist"]
 }

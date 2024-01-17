@@ -1,5 +1,5 @@
 import fs from 'fs/promises';
-import Path from 'path';
+import { join } from 'path';
 import normalize from '@/normalize';
 import exists from '@/exists';
 
@@ -21,7 +21,7 @@ const deleteItem = async (itemPath: string, includeSubDirs: boolean): Promise<vo
       if (files.length > 0) {
         if (includeSubDirs) {
           // 将子目录和文件添加到栈中
-          files.forEach((file) => stack.push(Path.join(currentPath, file)));
+          files.forEach((file) => stack.push(join(currentPath, file)));
         } else {
           // 不包含子目录，跳过非空目录
           stack.pop();

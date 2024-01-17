@@ -15,7 +15,7 @@ describe('@/move/file', () => {
   });
 
   afterEach(async () => {
-    await remove([sourceFile, targetFile]);
+    await remove([sourceFile, targetFile, 'testTargetDir']);
   });
 
   it('成功移动文件', async () => {
@@ -27,9 +27,9 @@ describe('@/move/file', () => {
     expect(sourceExists).toBe(false);
   });
 
-  it('移动到已存在的文件，应该抛出异常', async () => {
+  it('移动到已存在的文件，而且不覆盖的情况下，应该返回 false', async () => {
     await write(targetFile, '已存在的内容');
-    expect(move(sourceFile, targetFile, false)).rejects.toThrow();
+    expect(await move(sourceFile, targetFile, false)).toBeFalsy();
   });
 
   it('移动到已存在的文件，开启覆盖后，应该成功', async () => {
@@ -37,20 +37,13 @@ describe('@/move/file', () => {
     expect(await move(sourceFile, targetFile, true)).toBe(true);
   });
 
-  it('源文件不存在时应，应该抛出异常', async () => {
+  it('源文件不存在时应，应该返回 false', async () => {
     const nonExistingFile = 'nonExistingFile.txt';
-    expect(move(nonExistingFile, targetFile, false)).rejects.toThrow();
+    expect(await move(nonExistingFile, targetFile, false)).toBeFalsy();
   });
 
-  it('目标路径是目录时，应该抛出异常', async () => {
+  it('目标路径不是文件时，应该返回 false', async () => {
     const targetDir = 'testTargetDir';
-    let error = null;
-    try {
-      await move(sourceFile, targetDir, false);
-    } catch (e) {
-      error = e;
-    }
-    await remove(targetDir);
-    expect(error).toBeInstanceOf(Error);
+    expect(await move(sourceFile, targetDir, false)).toBeFalsy();
   });
 });

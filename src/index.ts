@@ -1,13 +1,13 @@
 export { default as normalize } from './normalize';
 export { default as exists } from './exists';
-export { default as notExists } from './notExists';
+export { default as notExists } from './exists/not';
 export { default as remove } from './remove';
 export { default as removeEmptyDirs } from './remove/emptyDirs';
 export { default as makeDir } from './makeDir';
 export { default as isDir } from './isDir';
 export { default as isFile } from './isFile';
-export { default as read } from './read';
 export { default as write } from './write';
+export { default as read } from './read';
 export { default as getDir } from './getDir';
 export { default as copyFile } from './copy/file';
 export { default as copyDir } from './copy/dir';

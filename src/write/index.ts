@@ -5,22 +5,32 @@ import notExists from '@/exists/not';
 import makeDir from '@/makeDir';
 
 /**
+ * 类型：append 为 false，overwrite 为 true (append is false, overwrite is true)
+ */
+type TWriteAppendFalseOverwriteTrue = {
+  append?: false;
+  overwrite?: true;
+};
+
+/**
+ * 类型：append 为 true，overwrite 为 false (append is true, overwrite is false)
+ */
+type TWriteAppendTrueOverwriteFalse = {
+  append?: true;
+  overwrite?: false;
+};
+
+/**
+ * 类型：编码选项 (encoding options)
+ */
+type TWriteEncodingOption = {
+  encoding?: BufferEncoding;
+};
+
+/**
  * 类型：写入选项 (write options)
  */
-type TWriteOptions = {
-  /**
-   * 是否追加 (whether to append)
-   */
-  append?: boolean;
-  /**
-   * 如果文件已存在，是否覆盖 (if the file already exists, whether to overwrite)
-   */
-  overwrite?: boolean;
-  /**
-   * 文件的编码格式，默认为 utf8 (the encoding format of the file, default is utf8)
-   */
-  encoding?: BufferEncoding;
-} & ({ append: true; overwrite?: boolean } | { append?: boolean; overwrite: true } | { overwrite?: true; encoding: BufferEncoding });
+type TWriteOptions = (TWriteAppendFalseOverwriteTrue | TWriteAppendTrueOverwriteFalse) & TWriteEncodingOption;
 
 /**
  * 抛出错误 (throw error)

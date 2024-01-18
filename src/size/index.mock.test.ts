@@ -20,7 +20,7 @@ describe('@/size.mock', () => {
     await remove(testDir);
   });
 
-  it('处理大于Number.MAX_SAFE_INTEGER的文件大小', async () => {
+  it('处理大于Number.MAX_SAFE_INTEGER的文件体积', async () => {
     const testFileSize = BigInt(Number.MAX_SAFE_INTEGER) + BigInt(1);
 
     jest.doMock('fs/promises', () => ({

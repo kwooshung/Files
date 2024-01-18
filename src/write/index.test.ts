@@ -39,7 +39,7 @@ describe('@/write', () => {
 
   it('文件不存在时，append 应创建文件并写入内容', async () => {
     // 文件不存在，使用 append 写入
-    await write(testFile, testContent, { append: true });
+    await write(testFile, testContent, { append: true, overwrite: false });
     // 读取文件内容
     const content = await read(testFile);
     expect(content).toBe(testContent);
@@ -58,6 +58,6 @@ describe('@/write', () => {
     const error = new Error('Some error') as NodeJS.ErrnoException;
     error.code = 'EEXIST'; // 一个典型的非 EEXIST 错误代码
     jest.spyOn(fs, 'writeFile').mockRejectedValueOnce(error);
-    expect(await write(testFile, 'EEXIST', { append: true })).toBeTruthy();
+    expect(await write(testFile, 'EEXIST', { append: true, overwrite: false })).toBeTruthy();
   });
 });

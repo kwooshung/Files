@@ -29,7 +29,7 @@ describe('@/remove/emptyDirs', () => {
     await expect(removeEmptyDirs(nonExistingPath)).rejects.toThrow();
   });
 
-  it('应该删除所有空文件夹', async () => {
+  it('应该删除所有空目录', async () => {
     const result = await removeEmptyDirs(testDirBase);
     expect(result).toBeTruthy();
   });
@@ -94,7 +94,7 @@ describe('@/remove/emptyDirs', () => {
     expect(await notExists(join(testDirBase, 'd'))).toBeTruthy();
   });
 
-  it('不应删除包含文件的文件夹', async () => {
+  it('不应删除包含文件的目录', async () => {
     const notEmptyDirExists = await remove(join(testDirBase, 'notEmptyDir'));
     expect(notEmptyDirExists).toBeTruthy();
   });
@@ -105,7 +105,7 @@ describe('@/remove/emptyDirs', () => {
     await expect(removeEmptyDirs(filePath)).rejects.toThrow();
   });
 
-  it('应该删除嵌套的空文件夹', async () => {
+  it('应该删除嵌套的空目录', async () => {
     const nestedEmptyDirExists = await remove(join(testDirBase, 'nestedDir/emptyNestedDir'));
     expect(nestedEmptyDirExists).toBeTruthy();
   });

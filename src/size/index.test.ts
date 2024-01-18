@@ -21,21 +21,21 @@ describe('@/size', () => {
     await remove(testDir);
   });
 
-  it('获取文件大小', async () => {
+  it('获取文件体积', async () => {
     const results = await size(testFile);
     expect(results).toHaveLength(1);
     expect(results[0].path).toBe(testFile);
     expect(results[0].size).toBeGreaterThan(0);
   });
 
-  it('获取目录大小', async () => {
+  it('获取目录体积', async () => {
     const results = await size(testDir);
     expect(results).toHaveLength(1);
     expect(results[0].path).toBe(testDir);
     expect(results[0].size).toBeGreaterThan(0);
   });
 
-  it('获取多个路径的大小', async () => {
+  it('获取多个路径的体积', async () => {
     const results = await size([testFile, testSubDir]);
     expect(results).toHaveLength(2);
     results.forEach((result) => {

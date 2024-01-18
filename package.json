@@ -1,6 +1,6 @@
 {
   "name": "@kwooshung/files",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "title": "files",
   "description": "A convenient and efficient library for file operations.",
   "private": false,
@@ -48,8 +48,10 @@
     "test:ci": "jest --coverage --ci",
     "eslint": "eslint . --fix --cache --quiet --report-unused-disable-directives --max-warnings 0 --ext .js,.cjs,.jsx,.ts,.cts,.tsx"
   },
+  "dependencies": {
+    "filehound": "^1.17.6"
+  },
   "peerDependencies": {
-    "filehound": "*",
     "node": ">=14.0.0"
   },
   "devDependencies": {

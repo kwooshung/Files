@@ -13,3 +13,4 @@ export { default as copyFile } from './copy/file';
 export { default as copyDir } from './copy/dir';
 export { default as moveFile } from './move/file';
 export { default as moveDir } from './move/dir';
+export { default as hound } from './hound';

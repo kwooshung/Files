@@ -49,6 +49,7 @@
     "eslint": "eslint . --fix --cache --quiet --report-unused-disable-directives --max-warnings 0 --ext .js,.cjs,.jsx,.ts,.cts,.tsx"
   },
   "peerDependencies": {
+    "filehound": "*",
     "node": ">=14.0.0"
   },
   "devDependencies": {
@@ -74,8 +75,5 @@
     "tsup": "^8.0.1",
     "typescript": "^5.3.3"
   },
-  "license": "MIT",
-  "dependencies": {
-    "filehound": "^1.17.6"
-  }
+  "license": "MIT"
 }

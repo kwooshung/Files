@@ -37,7 +37,7 @@ describe('@/read', () => {
   it('应该能够正确读取非默认编码格式的文件', async () => {
     const content = '这是一段测试文本';
     const encodedFilePath = join(testDirRoot, 'encodedFile.txt');
-    await write(encodedFilePath, content, false, true, 'utf16le');
+    await write(encodedFilePath, content, { encoding: 'utf16le' });
     const readContent = await read(encodedFilePath, 'utf16le');
     expect(readContent).toBe(content);
   });

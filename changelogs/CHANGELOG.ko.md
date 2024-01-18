@@ -1,3 +1,7 @@
+## 🎉 1.0.1 `2024-01-19`
+### 🐛 Fix
+- 종속 구성 오류 ([#cc6ea60](https://github.com/kwooshung/files/commit/cc6ea606cceb145e0fe98449cf44ec31421ed23e))
+
 ## 🎉 1.0.0 `2024-01-19`
 ### ✨ Feature
 - 중국어 및 영어 readme.md가 완료되었습니다 ([#3798c58](https://github.com/kwooshung/files/commit/3798c58de0462d60c3e4171fce683a42647518f4))
@@ -31,4 +35,3 @@
 - 모든 삭제가 완료되었는지 확인하십시오 ([#a9d76f4](https://github.com/kwooshung/files/commit/a9d76f4523f753d8096341182a28329cb643c119))
 ### Other
 - 초기 커밋 ([#2fb5694](https://github.com/kwooshung/files/commit/2fb569486270d052230ee82510fc004129912a6e))
-

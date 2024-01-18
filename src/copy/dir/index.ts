@@ -19,10 +19,7 @@ const dir = async (source: string, target: string, overwrite: boolean = true): P
       throw new Error('The source path is not a directory.');
     } else if (!(await isDir(target))) {
       if (await notExists(target)) {
-        // 下面这个条件比较苛刻，不太容易出现，测试也不容易覆盖到，从而保证了代码的健壮性 (The following condition is relatively harsh and not easy to appear, and the test is not easy to cover, thereby ensuring the robustness of the code)
-        if (!(await makeDir(target))) {
-          throw new Error('The target path is not a directory.');
-        }
+        await makeDir(target);
       }
     }
 
@@ -55,7 +52,6 @@ const dir = async (source: string, target: string, overwrite: boolean = true): P
     if (err instanceof Error) {
       throw err;
     }
-    return false;
   }
 };
 

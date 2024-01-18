@@ -5,7 +5,7 @@ import notExists from '@/exists/not';
 import makeDir from '@/makeDir';
 
 /**
- * 写入选项 (write options)
+ * 类型：写入选项 (write options)
  */
 type TWriteOptions = {
   /**

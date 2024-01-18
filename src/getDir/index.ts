@@ -2,7 +2,7 @@ import fs from 'fs/promises';
 import { join } from 'path';
 
 /**
- * 过滤类型 (filter type)
+ * 类型：过滤类型 (filter type)
  */
 type TFilterType = 'all' | 'file' | 'dir';
 

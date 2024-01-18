@@ -13,14 +13,10 @@ const dir = async (source: string, target: string, overwrite: boolean = true): P
     if (await copy(source, target, overwrite)) {
       return await remove(source);
     }
-
-    return false;
   } catch (err) {
     if (err instanceof Error) {
       throw err;
     }
-
-    return false;
   }
 };
 

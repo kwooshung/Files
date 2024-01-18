@@ -9,19 +9,11 @@ import copy from '@/copy/file';
  * @returns {Promise<boolean>} 是否移动成功
  */
 const file = async (source: string, target: string, overwrite: boolean = true): Promise<boolean> => {
-  try {
-    if (await copy(source, target, overwrite)) {
-      return await remove(source);
-    }
-
-    return false;
-  } catch (err) {
-    if (err instanceof Error) {
-      throw err;
-    }
-
-    return false;
+  if (await copy(source, target, overwrite)) {
+    return await remove(source);
   }
+
+  return false;
 };
 
 export default file;

@@ -1,6 +1,6 @@
 {
   "name": "@kwooshung/files",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "title": "files",
   "description": "A convenient and efficient library for file operations.",
   "private": false,

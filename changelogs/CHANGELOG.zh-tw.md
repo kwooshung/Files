@@ -1,3 +1,7 @@
+## 🎉 1.0.2 `2024-01-21`
+### 🆕 Add
+- 添加.gitAttributes，強制設置為LF ([#e48ae85](https://github.com/kwooshung/files/commit/e48ae85142cd177763fd79c0d2945c9bbde9cb3c))
+
 ## 🎉 1.0.1 `2024-01-19`
 ### 🐛 Fix
 - 依賴配置錯誤 ([#cc6ea60](https://github.com/kwooshung/files/commit/cc6ea606cceb145e0fe98449cf44ec31421ed23e))

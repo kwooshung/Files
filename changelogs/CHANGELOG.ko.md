@@ -1,3 +1,7 @@
+## 🎉 1.0.3 `2024-01-25`
+### 🐛 Fix
+- 잘못된 단어를 수정하고 종속성을 업데이트하십시오 ([#5ae9cd7](https://github.com/kwooshung/files/commit/5ae9cd70e57c7ee9ad6c20c9cc25698f99944174))
+
 ## 🎉 1.0.2 `2024-01-21`
 ### 🆕 Add
 - .gitattributes, 강제 설정을 LF에 추가하십시오 ([#e48ae85](https://github.com/kwooshung/files/commit/e48ae85142cd177763fd79c0d2945c9bbde9cb3c))

@@ -1,3 +1,7 @@
+## 🎉 1.0.3 `2024-01-25`
+### 🐛 Fix
+- 修復錯誤的單詞，更新依賴項 ([#5ae9cd7](https://github.com/kwooshung/files/commit/5ae9cd70e57c7ee9ad6c20c9cc25698f99944174))
+
 ## 🎉 1.0.2 `2024-01-21`
 ### 🆕 Add
 - 添加.gitAttributes，強制設置為LF ([#e48ae85](https://github.com/kwooshung/files/commit/e48ae85142cd177763fd79c0d2945c9bbde9cb3c))

@@ -1,3 +1,7 @@
+## 🎉 1.0.6 `2024-02-02`
+### 🐛 Fix
+- 质量测试徽章地址 ([#3360bff](https://github.com/kwooshung/files/commit/3360bffdacb06ea262e3891bdfd91119232a0517))
+
 ## 🎉 1.0.5 `2024-02-01`
 ### 🐛 Fix
 - 更改包装的仓库地址 ([#9b98d15](https://github.com/kwooshung/files/commit/9b98d1563a842474cefcbd0507b95fe6729fa9a0))

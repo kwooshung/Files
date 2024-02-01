@@ -1,3 +1,7 @@
+## 🎉 1.0.6 `2024-02-02`
+### 🐛 Fix
+- 高品質のテストバッジアドレス ([#3360bff](https://github.com/kwooshung/files/commit/3360bffdacb06ea262e3891bdfd91119232a0517))
+
 ## 🎉 1.0.5 `2024-02-01`
 ### 🐛 Fix
 - パッケージの倉庫アドレスを変更します ([#9b98d15](https://github.com/kwooshung/files/commit/9b98d1563a842474cefcbd0507b95fe6729fa9a0))

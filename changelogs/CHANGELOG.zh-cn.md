@@ -1,3 +1,7 @@
+## 🎉 1.0.4 `2024-02-01`
+### 🐛 Fix
+- 修改仓库名称以使其更加统一 ([#539ce63](https://github.com/kwooshung/files/commit/539ce6329a901429da46cb53d40cbb8fabfae404))
+
 ## 🎉 1.0.3 `2024-01-25`
 ### 🐛 Fix
 - 修复错误的单词，更新依赖项 ([#5ae9cd7](https://github.com/kwooshung/files/commit/5ae9cd70e57c7ee9ad6c20c9cc25698f99944174))

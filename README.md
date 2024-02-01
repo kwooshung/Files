@@ -12,7 +12,7 @@
 [![Npm.js Downloads/Week](https://img.shields.io/npm/dw/@kwooshung/files?labelColor=272e3b&labelColor=272e3b&color=165dff&logo=npm)](https://www.npmjs.com/package/@kwooshung/files)
 [![Github CI/CD](https://github.com/kwooshung/Files/actions/workflows/ci.yml/badge.svg)](https://github.com/kwooshung/Files/actions/)
 [![codecov](https://codecov.io/gh/kwooshung/Files/graph/badge.svg?token=VVZJE7H0KD)](https://codecov.io/gh/kwooshung/Files)
-[![Maintainability](https://api.codeclimate.com/v1/badges/325d0881b1ca19165d35/maintainability)](https://codeclimate.com/github/kwooshung/Files/maintainability/)
+[![Maintainability](https://api.codeclimate.com/v1/badges/4e51219d9c622f19fc96/maintainability)](https://codeclimate.com/github/kwooshung/Files/maintainability)
 [![GitHub License](https://img.shields.io/github/license/kwooshung/Files?labelColor=272e3b&color=165dff)](LICENSE)
 [![Gitee Repo](https://img.shields.io/badge/gitee-files-165dff?logo=gitee)](https://gitee.com/kwooshung/Files/)
 ![Github Stars](https://img.shields.io/github/stars/kwooshung/Files?labelColor=272e3b&color=165dff)

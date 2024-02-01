@@ -17,13 +17,13 @@
     "suanfa"
   ],
   "author": "kwooshung",
-  "homepage": "https://github.com/kwooshung/files",
+  "homepage": "https://github.com/kwooshung/Files",
   "repository": {
     "type": "git",
-    "url": "https://github.com/kwooshung/files.git"
+    "url": "https://github.com/kwooshung/Files.git"
   },
   "bugs": {
-    "url": "https://github.com/kwooshung/files/issues"
+    "url": "https://github.com/kwooshung/Files/issues"
   },
   "type": "module",
   "main": "dist/files.cjs",

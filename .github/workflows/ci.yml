@@ -50,8 +50,8 @@ jobs:
         env:
           SSH_PRIVATE_KEY: ${{ secrets.GITEE_PRIVATE_KEY }}
         with:
-          source-repo: 'git@github.com:kwooshung/files.git'
-          destination-repo: 'git@gitee.com:kwooshung/files.git'
+          source-repo: 'git@github.com:kwooshung/Files.git'
+          destination-repo: 'git@gitee.com:kwooshung/Files.git'
 
       # 自动发布到 npm
       - name: Sync to Npm.js

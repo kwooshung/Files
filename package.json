@@ -1,6 +1,6 @@
 {
   "name": "@kwooshung/files",
-  "version": "1.0.3",
+  "version": "1.0.5",
   "title": "files",
   "description": "A convenient and efficient library for file operations.",
   "private": false,
@@ -17,13 +17,13 @@
     "suanfa"
   ],
   "author": "kwooshung",
-  "homepage": "https://github.com/kwooshung/files",
+  "homepage": "https://github.com/kwooshung/Files",
   "repository": {
     "type": "git",
-    "url": "https://github.com/kwooshung/files.git"
+    "url": "https://github.com/kwooshung/Files.git"
   },
   "bugs": {
-    "url": "https://github.com/kwooshung/files/issues"
+    "url": "https://github.com/kwooshung/Files/issues"
   },
   "type": "module",
   "main": "dist/files.cjs",

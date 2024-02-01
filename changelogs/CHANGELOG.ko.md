@@ -1,3 +1,11 @@
+## 🎉 1.0.5 `2024-02-01`
+### 🐛 Fix
+- 패키지의 창고 주소를 변경하십시오 ([#9b98d15](https://github.com/kwooshung/files/commit/9b98d1563a842474cefcbd0507b95fe6729fa9a0))
+
+## 🎉 1.0.4 `2024-02-01`
+### 🐛 Fix
+- 창고 이름을 수정하여 더 균일하게 만들 수 있습니다 ([#539ce63](https://github.com/kwooshung/files/commit/539ce6329a901429da46cb53d40cbb8fabfae404))
+
 ## 🎉 1.0.3 `2024-01-25`
 ### 🐛 Fix
 - 잘못된 단어를 수정하고 종속성을 업데이트하십시오 ([#5ae9cd7](https://github.com/kwooshung/files/commit/5ae9cd70e57c7ee9ad6c20c9cc25698f99944174))

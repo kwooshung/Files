@@ -1,3 +1,11 @@
+## 🎉 1.0.5 `2024-02-01`
+### 🐛 Fix
+- パッケージの倉庫アドレスを変更します ([#9b98d15](https://github.com/kwooshung/files/commit/9b98d1563a842474cefcbd0507b95fe6729fa9a0))
+
+## 🎉 1.0.4 `2024-02-01`
+### 🐛 Fix
+- 倉庫名を変更して、より均一にします ([#539ce63](https://github.com/kwooshung/files/commit/539ce6329a901429da46cb53d40cbb8fabfae404))
+
 ## 🎉 1.0.3 `2024-01-25`
 ### 🐛 Fix
 - 間違った単語を修正し、依存関係を更新します ([#5ae9cd7](https://github.com/kwooshung/files/commit/5ae9cd70e57c7ee9ad6c20c9cc25698f99944174))

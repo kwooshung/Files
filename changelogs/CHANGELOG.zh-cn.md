@@ -1,3 +1,7 @@
+## 🎉 1.0.5 `2024-02-01`
+### 🐛 Fix
+- 更改包装的仓库地址 ([#9b98d15](https://github.com/kwooshung/files/commit/9b98d1563a842474cefcbd0507b95fe6729fa9a0))
+
 ## 🎉 1.0.4 `2024-02-01`
 ### 🐛 Fix
 - 修改仓库名称以使其更加统一 ([#539ce63](https://github.com/kwooshung/files/commit/539ce6329a901429da46cb53d40cbb8fabfae404))

@@ -1,3 +1,7 @@
+## 🎉 1.0.7 `2024-02-03`
+### 🐛 Fix
+- The file address in the bag specifies an error ([#0c23ee0](https://github.com/kwooshung/files/commit/0c23ee0386f20a0409787968323506493e1ae18b))
+
 ## 🎉 1.0.6 `2024-02-02`
 ### 🐛 Fix
 - Quality Test badges address ([#3360bff](https://github.com/kwooshung/files/commit/3360bffdacb06ea262e3891bdfd91119232a0517))

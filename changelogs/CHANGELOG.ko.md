@@ -1,3 +1,7 @@
+## 🎉 1.0.8 `2024-02-15`
+### 🐛 Fix
+- 문서 설명 세부 정보 설명 오류 ([#cf2f157](https://github.com/kwooshung/files/commit/cf2f157c2d09b09deee73317cecd309cf45b09be))
+
 ## 🎉 1.0.7 `2024-02-03`
 ### 🐛 Fix
 - 백의 파일 주소는 오류를 지정합니다 ([#0c23ee0](https://github.com/kwooshung/files/commit/0c23ee0386f20a0409787968323506493e1ae18b))

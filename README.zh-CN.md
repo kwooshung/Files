@@ -266,7 +266,7 @@ async () => {
 };
 ```
 
-## [size/unit](src/size/human/index.ts) 将数字，转换为带单位的体积尺寸
+## [size/human](src/size/human/index.ts) 将数字，转换为带单位的体积尺寸
 
 ```ts
 import { sizeHuman } from '@kwooshung/files';

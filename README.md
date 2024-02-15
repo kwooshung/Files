@@ -267,7 +267,7 @@ async () => {
 };
 ```
 
-## [size/unit](src/size/human/index.ts) Convert a Number to a Human-Readable Size
+## [size/human](src/size/human/index.ts) Convert a Number to a Human-Readable Size
 
 ```ts
 import { sizeHuman } from '@kwooshung/files';

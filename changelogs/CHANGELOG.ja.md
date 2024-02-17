@@ -1,3 +1,7 @@
+## 🎉 1.0.9 `2024-02-18`
+### 🐛 Fix
+- ノード依存関係を更新します ([#8971631](https://github.com/kwooshung/files/commit/8971631147df8617f0493b804ebcbc375f766ffd))
+
 ## 🎉 1.0.8 `2024-02-15`
 ### 🐛 Fix
 - ドキュメントの修復説明詳細説明エラー ([#cf2f157](https://github.com/kwooshung/files/commit/cf2f157c2d09b09deee73317cecd309cf45b09be))

@@ -1,3 +1,7 @@
+## 🎉 1.0.9 `2024-02-18`
+### 🐛 Fix
+- 更新节点依赖项 ([#8971631](https://github.com/kwooshung/files/commit/8971631147df8617f0493b804ebcbc375f766ffd))
+
 ## 🎉 1.0.8 `2024-02-15`
 ### 🐛 Fix
 - 维修文件说明详细信息说明错误 ([#cf2f157](https://github.com/kwooshung/files/commit/cf2f157c2d09b09deee73317cecd309cf45b09be))

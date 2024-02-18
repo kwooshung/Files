@@ -1,3 +1,7 @@
+## 🎉 1.0.9 `2024-02-18`
+### 🐛 Fix
+- 노드 종속성을 업데이트합니다 ([#8971631](https://github.com/kwooshung/files/commit/8971631147df8617f0493b804ebcbc375f766ffd))
+
 ## 🎉 1.0.8 `2024-02-15`
 ### 🐛 Fix
 - 문서 설명 세부 정보 설명 오류 ([#cf2f157](https://github.com/kwooshung/files/commit/cf2f157c2d09b09deee73317cecd309cf45b09be))

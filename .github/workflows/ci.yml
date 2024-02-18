@@ -57,7 +57,7 @@ jobs:
       - name: Sync to Npm.js
         uses: actions/setup-node@main
         with:
-          node-version: '14.0.0'
+          node-version: '16.14.0'
           registry-url: https://registry.npmjs.org/
       - name: Publish to Npm.js
         run: npm publish --access public
